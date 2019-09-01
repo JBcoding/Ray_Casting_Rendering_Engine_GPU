@@ -18,7 +18,7 @@ RCRE_convexPolyhedron *RCRE_convexPolyhedron_toCUDA(RCRE_convexPolyhedron *host)
     RCRE_convexPolyhedron *device;
     cudaMalloc((void**)&device, sizeof(RCRE_convexPolyhedron));
 
-    RCRE_convexPolyhedron temp = {0};
+    RCRE_convexPolyhedron temp;
     temp.nTriangles = host->nTriangles;
     temp.boundingSphereRadius = host->boundingSphereRadius;
     temp.centerPoint = RCRE_point3D_toCUDA(host->centerPoint);
@@ -38,7 +38,7 @@ RCRE_model3D *RCRE_model3D_toCUDA(RCRE_model3D *host) {
     RCRE_model3D *device;
     cudaMalloc((void**)&device, sizeof(RCRE_model3D));
 
-    RCRE_model3D tempModel = {0};
+    RCRE_model3D tempModel;
     tempModel.centerPoint = RCRE_point3D_toCUDA(host->centerPoint);
     tempModel.color = RCRE_color_toCUDA(host->color);
     tempModel.nEntries = host->nEntries;
@@ -54,15 +54,15 @@ RCRE_model3D *RCRE_model3D_toCUDA(RCRE_model3D *host) {
         RCRE_model3D_entry *deviceEntry;
         cudaMalloc((void**)&deviceEntry, sizeof(RCRE_model3D_entry));
 
-        RCRE_model3D_entry tempEntry = {0};
+        RCRE_model3D_entry tempEntry;
         tempEntry.negative = host->entries[i]->negative;
         tempEntry.datatype = host->entries[i]->datatype;
         tempEntry.transformationMatrix = RCRE_transformationMatrix_toCUDA(host->entries[i]->transformationMatrix);
         tempEntry.inverseTransformationMatrix = RCRE_transformationMatrix_toCUDA(host->entries[i]->inverseTransformationMatrix);
         if (host->entries[i]->datatype == RCRE_model3D_DATATYPE_SPHERE) {
-            tempEntry.data = RCRE_sphere_toCUDA(host->entries[i]->data);
+            tempEntry.data = RCRE_sphere_toCUDA((RCRE_sphere*)host->entries[i]->data);
         } else if (host->entries[i]->datatype == RCRE_model3D_DATATYPE_CONVEX_POLYHEDRON) {
-            tempEntry.data = RCRE_convexPolyhedron_toCUDA(host->entries[i]->data);
+            tempEntry.data = RCRE_convexPolyhedron_toCUDA((RCRE_convexPolyhedron*)host->entries[i]->data);
         }
 
         cudaMemcpy(deviceEntry, &tempEntry, sizeof(RCRE_model3D_entry), cudaMemcpyHostToDevice);
@@ -85,7 +85,7 @@ RCRE_point3D *RCRE_point3D_toCUDA(RCRE_point3D *host) {
 RCRE_sphere *RCRE_sphere_toCUDA(RCRE_sphere *host) {
     RCRE_sphere *device;
     cudaMalloc((void**)&device, sizeof(RCRE_sphere));
-    RCRE_sphere temp = {0};
+    RCRE_sphere temp;
     temp.center = RCRE_point3D_toCUDA(host->center);
     temp.radius = host->radius;
     cudaMemcpy(device, &temp, sizeof(RCRE_sphere), cudaMemcpyHostToDevice);
@@ -102,7 +102,7 @@ RCRE_transformationMatrix *RCRE_transformationMatrix_toCUDA(RCRE_transformationM
 RCRE_triangle3D *RCRE_triangle3D_toCUDA(RCRE_triangle3D *host) {
     RCRE_triangle3D *device;
     cudaMalloc((void**)&device, sizeof(RCRE_triangle3D));
-    RCRE_triangle3D temp = {0};
+    RCRE_triangle3D temp;
     temp.p1 = RCRE_point3D_toCUDA(host->p1);
     temp.p2 = RCRE_point3D_toCUDA(host->p2);
     temp.p3 = RCRE_point3D_toCUDA(host->p3);

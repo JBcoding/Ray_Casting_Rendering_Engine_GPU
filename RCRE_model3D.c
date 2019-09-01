@@ -60,9 +60,9 @@ PRE_DEVICE void RCRE_model3D_insertEntry(RCRE_model3D *model, void *data, int da
 PRE_DEVICE bool RCRE_model3D_getIntersection(RCRE_model3D *m, RCRE_point3D *rayOrigin, RCRE_point3D *rayDirection,
                                   RCRE_point3D *outIntersectionPoint, RCRE_point3D *outReflectiveDirection,
                                   RCRE_point3D *outExitPoint, RCRE_point3D *outExitDirection) {
-    RCRE_point3D insideDirection = {0};
+    RCRE_point3D insideDirection;
     if (RCRE_model3D_getIntersectionPoint(m, true, rayOrigin, rayDirection, outIntersectionPoint, outReflectiveDirection, &insideDirection)) {
-        RCRE_point3D dummy = {0};
+        RCRE_point3D dummy;
         if (RCRE_model3D_getIntersectionPoint(m, false, outIntersectionPoint, &insideDirection, outExitPoint, &dummy, outExitDirection)) {
             return true;
         }
@@ -72,8 +72,8 @@ PRE_DEVICE bool RCRE_model3D_getIntersection(RCRE_model3D *m, RCRE_point3D *rayO
 
 PRE_DEVICE bool RCRE_model3D_getIntersectionPoint(RCRE_model3D *m, bool rayOriginatingOutside, RCRE_point3D *rayOrigin, RCRE_point3D *rayDirection,
                                        RCRE_point3D *outIntersectionPoint, RCRE_point3D *outReflectiveDirection, RCRE_point3D *outRefractionDirection) {
-    RCRE_point3D rayOriginT = {0};
-    RCRE_point3D rayDirectionT = {0};
+    RCRE_point3D rayOriginT;
+    RCRE_point3D rayDirectionT;
 
     RCRE_transformationMatrix_applyToPointWithRegardsToPoint(m->inverseTransformationMatrix, rayOrigin, m->centerPoint, &rayOriginT);
     RCRE_transformationMatrix_applyToPoint(m->inverseTransformationMatrix, rayDirection, &rayDirectionT);
@@ -83,24 +83,24 @@ PRE_DEVICE bool RCRE_model3D_getIntersectionPoint(RCRE_model3D *m, bool rayOrigi
     for (int i = 0; i < m->nEntries; i ++) {
         RCRE_model3D_entry *entry = m->entries[i];
 
-        RCRE_point3D rayOriginTT = {0};
-        RCRE_point3D rayDirectionTT = {0};
+        RCRE_point3D rayOriginTT;
+        RCRE_point3D rayDirectionTT;
 
         RCRE_transformationMatrix_applyToPointWithRegardsToPoint(entry->inverseTransformationMatrix, &rayOriginT, RCRE_model3D_getCenterPointEntry(entry), &rayOriginTT);
         RCRE_transformationMatrix_applyToPoint(entry->inverseTransformationMatrix, &rayDirectionT, &rayDirectionTT);
 
-        RCRE_point3D rayDirectionTTUnit = {0};
+        RCRE_point3D rayDirectionTTUnit;
         RCRE_point3D_getUnit(&rayDirectionTT, &rayDirectionTTUnit);
 
         int index = 0;
         while (true) {
             bool success = false;
-            RCRE_point3D intersectionPointTT = {0};
-            RCRE_point3D reflectiveDirectionTT = {0};
+            RCRE_point3D intersectionPointTT;
+            RCRE_point3D reflectiveDirectionTT;
             if (entry->datatype == RCRE_model3D_DATATYPE_CONVEX_POLYHEDRON) {
-                success = RCRE_convexPolyhedron_getIntersectionPoint(entry->data, &rayOriginTT, &rayDirectionTTUnit, index, &intersectionPointTT, &reflectiveDirectionTT);
+                success = RCRE_convexPolyhedron_getIntersectionPoint((RCRE_convexPolyhedron*)entry->data, &rayOriginTT, &rayDirectionTTUnit, index, &intersectionPointTT, &reflectiveDirectionTT);
             } else if (entry->datatype == RCRE_model3D_DATATYPE_SPHERE) {
-                success = RCRE_sphere_getIntersectionPoint(entry->data, &rayOriginTT, &rayDirectionTTUnit, index, &intersectionPointTT, &reflectiveDirectionTT);
+                success = RCRE_sphere_getIntersectionPoint((RCRE_sphere*)entry->data, &rayOriginTT, &rayDirectionTTUnit, index, &intersectionPointTT, &reflectiveDirectionTT);
             }
             index ++;
 
@@ -117,8 +117,8 @@ PRE_DEVICE bool RCRE_model3D_getIntersectionPoint(RCRE_model3D *m, bool rayOrigi
             // must be inside something before
             // must not be inside or outside after
 
-            RCRE_point3D intersectionPointT = {0};
-            RCRE_point3D reflectiveDirectionT = {0};
+            RCRE_point3D intersectionPointT;
+            RCRE_point3D reflectiveDirectionT;
             RCRE_transformationMatrix_applyToPointWithRegardsToPoint(entry->transformationMatrix, &intersectionPointTT, RCRE_model3D_getCenterPointEntry(entry), &intersectionPointT);
             RCRE_transformationMatrix_applyToPoint(entry->transformationMatrix, &reflectiveDirectionTT, &reflectiveDirectionT);
 
@@ -139,8 +139,8 @@ PRE_DEVICE bool RCRE_model3D_getIntersectionPoint(RCRE_model3D *m, bool rayOrigi
                 }
             }
             if (afterSuccess && beforeSuccess) {
-                RCRE_point3D intersectionPoint = {0};
-                RCRE_point3D reflectiveDirection = {0};
+                RCRE_point3D intersectionPoint;
+                RCRE_point3D reflectiveDirection;
                 RCRE_transformationMatrix_applyToPointWithRegardsToPoint(m->transformationMatrix, &intersectionPointT, m->centerPoint, &intersectionPoint);
                 RCRE_transformationMatrix_applyToPoint(m->transformationMatrix, &reflectiveDirectionT, &reflectiveDirection);
 
@@ -159,7 +159,7 @@ PRE_DEVICE bool RCRE_model3D_getIntersectionPoint(RCRE_model3D *m, bool rayOrigi
 
                     double angleToNormal =
                             (M_PI - RCRE_point3D_getAngleBetweenPoints(rayDirection, &reflectiveDirection)) / 2.0;
-                    RCRE_point3D insideRayDirection = {0};
+                    RCRE_point3D insideRayDirection;
 
                     if (angleToNormal != 0) {
                         double refractiveIndex = m->refractiveIndex;
@@ -168,7 +168,10 @@ PRE_DEVICE bool RCRE_model3D_getIntersectionPoint(RCRE_model3D *m, bool rayOrigi
                         }
                         double newAngleToNormal = asin(sin(angleToNormal) / refractiveIndex);
 
-                        RCRE_point3D axisToTurnAbout = {0};
+                        RCRE_point3D axisToTurnAbout;
+                        axisToTurnAbout.x = 0;
+                        axisToTurnAbout.y = 0;
+                        axisToTurnAbout.z = 0;
                         RCRE_point3D_crossProduct(&reflectiveDirection, rayDirection, &axisToTurnAbout);
                         double angleToTurn = angleToNormal - newAngleToNormal;
 
@@ -191,9 +194,9 @@ PRE_DEVICE bool RCRE_model3D_getIntersectionPoint(RCRE_model3D *m, bool rayOrigi
 
 PRE_DEVICE bool RCRE_model3D_isPointContainedWithinEntry(RCRE_model3D_entry *me, RCRE_point3D *p) {
     if (me->datatype == RCRE_model3D_DATATYPE_CONVEX_POLYHEDRON) {
-        return RCRE_convexPolyhedron_isPointContainedWithin(me->data, p);
+        return RCRE_convexPolyhedron_isPointContainedWithin((RCRE_convexPolyhedron*)me->data, p);
     } else if (me->datatype == RCRE_model3D_DATATYPE_SPHERE) {
-        return RCRE_sphere_isPointContainedWithin(me->data, p);
+        return RCRE_sphere_isPointContainedWithin((RCRE_sphere*)me->data, p);
     }
 }
 

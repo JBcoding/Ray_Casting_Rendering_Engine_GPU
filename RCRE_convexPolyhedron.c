@@ -147,7 +147,7 @@ PRE_DEVICE bool RCRE_convexPolyhedron_getIntersectionPoint(RCRE_convexPolyhedron
     // ASSUMING rayDirection is a UNIT vector
 
     // START check if we intersect bound sphere, if not no need to check any more
-    RCRE_point3D oc = {0};
+    RCRE_point3D oc;
     RCRE_point3D_subtract(rayOrigin, cp->centerPoint, &oc);
     double doc = RCRE_point3D_dotProduct(rayDirection, &oc);
     double ocLength = RCRE_point3D_distanceToOrigin(&oc);

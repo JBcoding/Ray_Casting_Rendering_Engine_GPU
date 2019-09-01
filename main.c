@@ -25,7 +25,7 @@ int main() {
     RCRE_point3D *p7 = RCRE_point3D_getPointFromValues(xmax, ymax, zmin);
     RCRE_point3D *p8 = RCRE_point3D_getPointFromValues(xmax, ymax, zmax);
 
-    RCRE_point3D **points = malloc(sizeof(RCRE_point3D) * 8);
+    RCRE_point3D **points = (RCRE_point3D **)malloc(sizeof(RCRE_point3D*) * 8);
 
     points[0] = p1;
     points[1] = p2;
@@ -50,12 +50,11 @@ int main() {
     RCRE_sphere *s = RCRE_sphere_getSphereFromPointAndRadius(p8, 1);
     printf("%d\n", RCRE_sphere_isPointContainedWithin(s, RCRE_point3D_getPointFromValues(1.71, 1.5, 1.5)));
 
-    RCRE_point3D o = {0};
+    RCRE_point3D o;
     RCRE_point3D_rotatePointAroundAxis(RCRE_point3D_getPointFromValues(1, 0, 0), RCRE_point3D_getPointFromValues(0, 1, 0), RCRE_point3D_getPointFromValues(0, 0, 0), M_PI / 8, &o);
     printf("AAA %lf %lf %lf   %lf\n", o.x, o.y, o.z, RCRE_point3D_getAngleBetweenPoints(&o, RCRE_point3D_getPointFromValues(1, 0, 0)));
 
     RCRE_triangle3D *t = RCRE_triangle3D_getTriangleFromPoints(RCRE_point3D_getPointFromValues(1, 0, 0), RCRE_point3D_getPointFromValues(0, 0, 1), RCRE_point3D_getPointFromValues(0, 1, 0));
-    RCRE_point3D ip = {0};
 
 
 
@@ -70,7 +69,7 @@ int main() {
 
 
     int nModels = 101;
-    RCRE_model3D **models = malloc(sizeof(RCRE_model3D*) * nModels);
+    RCRE_model3D **models = (RCRE_model3D **)malloc(sizeof(RCRE_model3D*) * nModels);
 
 
     for (int i = 0; i < 10; i ++) {
@@ -84,7 +83,7 @@ int main() {
             RCRE_point3D *p7 = RCRE_point3D_getPointFromValues(7, 1 - 5 + i, 0 - 5 + j);
             RCRE_point3D *p8 = RCRE_point3D_getPointFromValues(7, 1 - 5 + i, 1 - 5 + j);
 
-            RCRE_point3D **points = malloc(sizeof(RCRE_point3D) * 8);
+            RCRE_point3D **points = (RCRE_point3D **)malloc(sizeof(RCRE_point3D*) * 8);
 
             points[0] = p1;
             points[1] = p2;
@@ -117,9 +116,9 @@ int main() {
     int width = 1920;
     int height = 1080;
     double angleOfView = M_PI / 2;
-    char *imageBuffer = malloc(width * height * 4);
+    char *imageBuffer = (char *)malloc(width * height * 4);
 
-    FILE *videoWriter = RCRE_ffmpeg_getVideoWriter(width, height, 24, "output");
+    //FILE *videoWriter = RCRE_ffmpeg_getVideoWriter(width, height, 24, "output");
     FILE *imgWriter = RCRE_ffmpeg_getImageWriter(width, height, "output");
     for (int i = 280/*220*/; i < 281/*330*/; i += 1) {
         free(cameraPosition);
@@ -130,7 +129,7 @@ int main() {
         //RCRE_ffmpeg_writeToFile(videoWriter, imageBuffer, width, height);
         RCRE_ffmpeg_writeToFile(imgWriter, imageBuffer, width, height);
     }
-    RCRE_ffmpeg_closeFile(videoWriter);
+    //RCRE_ffmpeg_closeFile(videoWriter);
     RCRE_ffmpeg_closeFile(imgWriter);
 
     return 0;

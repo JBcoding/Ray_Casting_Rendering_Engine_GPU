@@ -29,8 +29,8 @@ PRE_DEVICE bool RCRE_sphere_getIntersectionPoint(RCRE_sphere *s, RCRE_point3D *r
         return false;
     }
 
-    RCRE_point3D oc = {0};
-    RCRE_point3D sphereIntersectionPoint = {0};
+    RCRE_point3D oc;
+    RCRE_point3D sphereIntersectionPoint;
 
     RCRE_point3D_subtract(rayOrigin, s->center, &oc);
     double doc = RCRE_point3D_dotProduct(rayDirection, &oc);
@@ -71,8 +71,8 @@ PRE_DEVICE bool RCRE_sphere_getIntersectionPoint(RCRE_sphere *s, RCRE_point3D *r
 
 
 
-    RCRE_point3D rayOriginRotated = {0};
-    RCRE_point3D centerToIntersectionPoint = {0};
+    RCRE_point3D rayOriginRotated;
+    RCRE_point3D centerToIntersectionPoint;
 
     RCRE_point3D_subtract(&sphereIntersectionPoint, s->center, &centerToIntersectionPoint);
 

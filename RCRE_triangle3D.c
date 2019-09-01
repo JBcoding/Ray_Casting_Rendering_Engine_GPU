@@ -42,9 +42,9 @@ PRE_DEVICE double RCRE_triangle3D_getArea(RCRE_triangle3D *t) {
 }
 
 PRE_DEVICE double RCRE_triangle3D_getAreaTimes2(RCRE_triangle3D *t) {
-    RCRE_point3D ab = {0};
-    RCRE_point3D ac = {0};
-    RCRE_point3D normal = {0};
+    RCRE_point3D ab;
+    RCRE_point3D ac;
+    RCRE_point3D normal;
 
 
     RCRE_point3D_subtract(t->p1, t->p2, &ab);
@@ -57,14 +57,14 @@ PRE_DEVICE double RCRE_triangle3D_getAreaTimes2(RCRE_triangle3D *t) {
 
 
 PRE_DEVICE void RCRE_triangle3D_rotateTriangleAfterPoint(RCRE_triangle3D *t, RCRE_point3D *p) {
-    RCRE_point3D ab = {0};
-    RCRE_point3D ac = {0};
+    RCRE_point3D ab;
+    RCRE_point3D ac;
 
     RCRE_point3D_subtract(t->p1, t->p2, &ab);
     RCRE_point3D_subtract(t->p1, t->p3, &ac);
 
-    RCRE_point3D abc = {0};
-    RCRE_point3D acb = {0};
+    RCRE_point3D abc;
+    RCRE_point3D acb;
 
     RCRE_point3D_crossProduct(&ab, &ac, &abc);
     RCRE_point3D_crossProduct(&ac, &ab, &acb);
@@ -84,14 +84,14 @@ PRE_DEVICE int RCRE_triangle3D_isPointOnPositiveSide(RCRE_triangle3D *t, RCRE_po
         return 0;
     }
 
-    RCRE_point3D ab = {0};
-    RCRE_point3D ac = {0};
+    RCRE_point3D ab;
+    RCRE_point3D ac;
 
     RCRE_point3D_subtract(t->p1, t->p2, &ab);
     RCRE_point3D_subtract(t->p1, t->p3, &ac);
 
-    RCRE_point3D abc = {0};
-    RCRE_point3D acb = {0};
+    RCRE_point3D abc;
+    RCRE_point3D acb;
 
     RCRE_point3D_crossProduct(&ab, &ac, &abc);
     RCRE_point3D_crossProduct(&ac, &ab, &acb);
@@ -110,11 +110,11 @@ PRE_DEVICE int RCRE_triangle3D_isPointOnPositiveSide(RCRE_triangle3D *t, RCRE_po
 PRE_DEVICE bool RCRE_triangle3D_getIntersectionPoint(RCRE_triangle3D *t, RCRE_point3D *rayOrigin, RCRE_point3D *rayDirection,
                                           RCRE_point3D *outIntersectionPoint, RCRE_point3D *outReflectiveDirection) {
 
-    RCRE_point3D planeNormal = {0};
-    RCRE_point3D ab = {0};
-    RCRE_point3D ac = {0};
-    RCRE_point3D num = {0};
-    RCRE_point3D planeIntersectionPoint = {0};
+    RCRE_point3D planeNormal;
+    RCRE_point3D ab;
+    RCRE_point3D ac;
+    RCRE_point3D num;
+    RCRE_point3D planeIntersectionPoint;
 
     RCRE_point3D_subtract(t->p1, t->p2, &ab);
     RCRE_point3D_subtract(t->p1, t->p3, &ac);
@@ -143,17 +143,17 @@ PRE_DEVICE bool RCRE_triangle3D_getIntersectionPoint(RCRE_triangle3D *t, RCRE_po
     // Check to see if intersection point is hitting the triangle by converting to barycentric coordinates
     // https://en.wikipedia.org/wiki/Barycentric_coordinate_system
 
-    RCRE_point3D pp1 = {0};
-    RCRE_point3D pp2 = {0};
-    RCRE_point3D pp3 = {0};
+    RCRE_point3D pp1;
+    RCRE_point3D pp2;
+    RCRE_point3D pp3;
 
     RCRE_point3D_subtract(&planeIntersectionPoint, t->p1, &pp1);
     RCRE_point3D_subtract(&planeIntersectionPoint, t->p2, &pp2);
     RCRE_point3D_subtract(&planeIntersectionPoint, t->p3, &pp3);
 
-    RCRE_point3D alpha = {0};
-    RCRE_point3D beta = {0};
-    RCRE_point3D gamma = {0};
+    RCRE_point3D alpha;
+    RCRE_point3D beta;
+    RCRE_point3D gamma;
 
     RCRE_point3D_crossProduct(&pp2, &pp3, &alpha);
     RCRE_point3D_crossProduct(&pp3, &pp1, &beta);
@@ -171,7 +171,7 @@ PRE_DEVICE bool RCRE_triangle3D_getIntersectionPoint(RCRE_triangle3D *t, RCRE_po
 
 
 
-        RCRE_point3D rayOriginRotated = {0};
+        RCRE_point3D rayOriginRotated;
 
         RCRE_point3D_rotatePointAroundAxis(rayOrigin, &planeNormal, &planeIntersectionPoint, M_PI, &rayOriginRotated);
 

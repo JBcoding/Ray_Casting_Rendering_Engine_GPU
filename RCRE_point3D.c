@@ -81,9 +81,9 @@ PRE_DEVICE bool RCRE_point3D_arePointsOnTheSamePlane(RCRE_point3D *a, RCRE_point
         return true;
     }
 
-    RCRE_point3D ab = {0};
-    RCRE_point3D ac = {0};
-    RCRE_point3D ad = {0};
+    RCRE_point3D ab;
+    RCRE_point3D ac;
+    RCRE_point3D ad;
 
     RCRE_point3D_subtract(a, b, &ab);
     RCRE_point3D_subtract(a, c, &ac);
@@ -114,7 +114,7 @@ PRE_DEVICE void RCRE_point3D_rotatePointAroundAxis(RCRE_point3D *p, RCRE_point3D
     // newY = (b(u^2 + w^2) - v(au + cw - ux - vy - wz))(1 - cos θ) + y cos θ + (  cu - aw + wx - uz) sin θ
     // newZ = (c(u^2 + v^2) - w(au + bv - ux - vy - wz))(1 - cos θ) + z cos θ + (- bu + av - vx + uy) sin θ
 
-    RCRE_point3D axisDirectionUnit = {0};
+    RCRE_point3D axisDirectionUnit;
     RCRE_point3D_getUnit(axisDirection, &axisDirectionUnit);
 
     double cosTheta = cos(angle);

@@ -128,7 +128,7 @@ PRE_DEVICE void RCRE_transformationMatrix_applyToPoint(RCRE_transformationMatrix
 
 PRE_DEVICE void RCRE_transformationMatrix_applyToPointWithRegardsToPoint(RCRE_transformationMatrix *m, RCRE_point3D *p,
                                                               RCRE_point3D *o, RCRE_point3D *out) {
-    RCRE_point3D po = {0};
+    RCRE_point3D po;
     RCRE_point3D_subtract(p, o, &po);
     RCRE_transformationMatrix_applyToPoint(m, &po, &po);
     RCRE_point3D_add(&po, o, out);

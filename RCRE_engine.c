@@ -9,9 +9,9 @@
 void RCRE_engine_getImage(RCRE_point3D *cameraPosition, RCRE_point3D *cameraDirection, RCRE_point3D *cameraUpDirection,
                           int nModels, RCRE_model3D **models, int width, int height, double angleOfView,
                           char *imageBuffer) {
-    RCRE_point3D cameraRightDirection = {0};
-    RCRE_point3D cameraForwardDirection = {0};
-    RCRE_point3D cameraUpwardsDirection = {0};
+    RCRE_point3D cameraRightDirection;
+    RCRE_point3D cameraForwardDirection;
+    RCRE_point3D cameraUpwardsDirection;
 
     RCRE_point3D_crossProduct(cameraDirection, cameraUpDirection, &cameraRightDirection);
 
@@ -51,18 +51,18 @@ void RCRE_engine_getImage(RCRE_point3D *cameraPosition, RCRE_point3D *cameraDire
 }
 
 
-PRE_GLOBAL PRE_DEVICE void RCRE_engine_fillPixels(RCRE_point3D *cameraPosition, RCRE_point3D *cameraForwardDirection,
+PRE_GLOBAL void RCRE_engine_fillPixels(RCRE_point3D *cameraPosition, RCRE_point3D *cameraForwardDirection,
                                                   RCRE_point3D *cameraRightDirection, RCRE_point3D *cameraUpwardsDirection,
                                                   int width, int height, double leftAndRightEffect, double upAndDownEffect,
                                                   int nModels, RCRE_model3D **models, char *imageBuffer) {
     for (int p = 0; p < height * width; p ++) {
         int h = p % height;
         int w = p / height; // integer division
-        RCRE_point3D direction = {0};
-        RCRE_point3D leftRight = {0};
-        RCRE_point3D upDown = {0};
+        RCRE_point3D direction;
+        RCRE_point3D leftRight;
+        RCRE_point3D upDown;
 
-        RCRE_point3D_add(&direction, cameraForwardDirection, &direction);
+        RCRE_point3D_copyInto(cameraForwardDirection, &direction);
 
         double lre = (w - (width - 1) / 2.0) / (double) ((width - 1) / 2.0);
         double ude = (h - (height - 1) / 2.0) / (double) ((height - 1) / 2.0);
@@ -76,7 +76,10 @@ PRE_GLOBAL PRE_DEVICE void RCRE_engine_fillPixels(RCRE_point3D *cameraPosition, 
         RCRE_point3D_add(&direction, &leftRight, &direction);
         RCRE_point3D_add(&direction, &upDown, &direction);
 
-        RCRE_color color = {0};
+        RCRE_color color;
+        color.r = 0;
+        color.g = 0;
+        color.b = 0;
 
         RCRE_engine_getColorFromRay(nModels, models, cameraPosition, &direction, 1.0, 0, &color);
 
@@ -101,17 +104,17 @@ PRE_DEVICE void RCRE_engine_getColorFromRay(int nModels, RCRE_model3D **models, 
 
     double bestDistance = DBL_MAX;
 
-    RCRE_point3D bestIntersectionPoint = {0};
-    RCRE_point3D bestReflectiveDirection = {0};
-    RCRE_point3D bestExitPoint = {0};
-    RCRE_point3D bestExitDirection = {0};
+    RCRE_point3D bestIntersectionPoint;
+    RCRE_point3D bestReflectiveDirection;
+    RCRE_point3D bestExitPoint;
+    RCRE_point3D bestExitDirection;
     RCRE_model3D *bestModel = NULL;
 
     for (int m = 0; m < nModels; m++) {
-        RCRE_point3D outIntersectionPoint = {0};
-        RCRE_point3D outReflectiveDirection = {0};
-        RCRE_point3D outExitPoint = {0};
-        RCRE_point3D outExitDirection = {0};
+        RCRE_point3D outIntersectionPoint;
+        RCRE_point3D outReflectiveDirection;
+        RCRE_point3D outExitPoint;
+        RCRE_point3D outExitDirection;
         if (RCRE_model3D_getIntersection(models[m], rayOrigin, rayDirection, &outIntersectionPoint, &outReflectiveDirection, &outExitPoint, &outExitDirection)) {
             double distance = RCRE_point3D_distance(rayOrigin, &outIntersectionPoint);
             if (distance > 0.000000001 && distance < bestDistance) {
@@ -136,8 +139,8 @@ PRE_DEVICE void RCRE_engine_getColorFromRay(int nModels, RCRE_model3D **models, 
     double weightModelColor = weightModelColorBeforeReflective * (1 - weightReflectiveColor);
     double weightContinuedColor = 1 - weightReflectiveColor - weightModelColor;
 
-    RCRE_color reflectiveColor = {0};
-    RCRE_color continuedColor = {0};
+    RCRE_color reflectiveColor;
+    RCRE_color continuedColor;
 
     RCRE_engine_getColorFromRay(nModels, models, &bestIntersectionPoint, &bestReflectiveDirection,
                                 weightReflectiveColor * totalWeight, recursiveCount + 1, &reflectiveColor);
