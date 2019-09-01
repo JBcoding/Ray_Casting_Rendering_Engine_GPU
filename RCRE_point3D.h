@@ -12,8 +12,6 @@ struct RCRE_point3D {
     double x, y, z;
 } typedef RCRE_point3D;
 
-static RCRE_point3D RCRE_point3D_ORIGIN = {.x = 0, .y = 0, .z = 0};
-
 PRE_DEVICE RCRE_point3D *RCRE_point3D_getPointFromValues(double x, double y, double z);
 PRE_DEVICE RCRE_point3D *RCRE_point3D_copy(RCRE_point3D *p);
 PRE_DEVICE void RCRE_point3D_copyInto(RCRE_point3D *p, RCRE_point3D *out);
@@ -31,6 +29,6 @@ PRE_DEVICE void RCRE_point3D_rotatePointAroundAxis(RCRE_point3D *p, RCRE_point3D
 PRE_DEVICE double RCRE_point3D_getAngleBetweenPoints(RCRE_point3D *p1, RCRE_point3D *p2);
 
 PRE_DEVICE bool RCRE_point3D_arePointsOnTheSamePlane(RCRE_point3D *a, RCRE_point3D *b, RCRE_point3D *c, RCRE_point3D *d);
-PRE_DEVICE bool RCRE_point3D_averagePointsWithWeight(RCRE_point3D *a, RCRE_point3D *b, double weight, RCRE_point3D *out);
+PRE_DEVICE void RCRE_point3D_averagePointsWithWeight(RCRE_point3D *a, RCRE_point3D *b, double weight, RCRE_point3D *out);
 
 #endif //RAYCASTINGRENDERINGENGINEGPU_RCRE_POINT3D_H

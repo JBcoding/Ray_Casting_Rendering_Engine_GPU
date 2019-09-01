@@ -6,7 +6,7 @@
 #include "RCRE_constants.h"
 
 PRE_DEVICE RCRE_triangle3D *RCRE_triangle3D_getTriangleFromPoints(RCRE_point3D *p1, RCRE_point3D *p2, RCRE_point3D *p3) {
-    struct RCRE_triangle3D *triangle3D = malloc(sizeof(RCRE_triangle3D));
+    RCRE_triangle3D *triangle3D = (RCRE_triangle3D *)malloc(sizeof(RCRE_triangle3D));
     triangle3D->p1 = p1;
     triangle3D->p2 = p2;
     triangle3D->p3 = p3;

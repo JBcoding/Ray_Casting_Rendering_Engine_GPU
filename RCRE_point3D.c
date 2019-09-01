@@ -6,7 +6,7 @@
 #include "RCRE_constants.h"
 
 PRE_DEVICE RCRE_point3D *RCRE_point3D_getPointFromValues(double x, double y, double z) {
-    RCRE_point3D *point3D = malloc(sizeof(RCRE_point3D));
+    RCRE_point3D *point3D = (RCRE_point3D *)malloc(sizeof(RCRE_point3D));
     point3D->x = x;
     point3D->y = y;
     point3D->z = z;
@@ -101,7 +101,7 @@ PRE_DEVICE bool RCRE_point3D_arePointsOnTheSamePlane(RCRE_point3D *a, RCRE_point
     return diff < minimumSignificant;
 }
 
-PRE_DEVICE bool RCRE_point3D_averagePointsWithWeight(RCRE_point3D *a, RCRE_point3D *b, double weight, RCRE_point3D *out) {
+PRE_DEVICE void RCRE_point3D_averagePointsWithWeight(RCRE_point3D *a, RCRE_point3D *b, double weight, RCRE_point3D *out) {
     out->x = a->x * (1 - weight) + b->x * weight;
     out->y = a->y * (1 - weight) + b->y * weight;
     out->z = a->z * (1 - weight) + b->z * weight;

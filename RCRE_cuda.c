@@ -23,7 +23,7 @@ RCRE_convexPolyhedron *RCRE_convexPolyhedron_toCUDA(RCRE_convexPolyhedron *host)
     temp.boundingSphereRadius = host->boundingSphereRadius;
     temp.centerPoint = RCRE_point3D_toCUDA(host->centerPoint);
     cudaMalloc((void**)&temp.triangles, sizeof(RCRE_triangle3D *) * host->nTriangles);
-    RCRE_triangle3D **tempList = malloc(sizeof(RCRE_triangle3D *) * host->nTriangles);
+    RCRE_triangle3D **tempList = (RCRE_triangle3D **)malloc(sizeof(RCRE_triangle3D *) * host->nTriangles);
     for (int i = 0; i < host->nTriangles; i ++) {
         tempList[i] = RCRE_triangle3D_toCUDA(host->triangles[i]);
     }
@@ -49,7 +49,7 @@ RCRE_model3D *RCRE_model3D_toCUDA(RCRE_model3D *host) {
     tempModel.transformationMatrix = RCRE_transformationMatrix_toCUDA(host->transformationMatrix);
     tempModel.inverseTransformationMatrix = RCRE_transformationMatrix_toCUDA(host->inverseTransformationMatrix);
     cudaMalloc((void**)&tempModel.entries, sizeof(RCRE_model3D_entry *) * host->nEntries);
-    RCRE_model3D_entry **tempEntries = malloc(sizeof(RCRE_model3D_entry *) * host->nEntries);
+    RCRE_model3D_entry **tempEntries = (RCRE_model3D_entry **)malloc(sizeof(RCRE_model3D_entry *) * host->nEntries);
     for (int i = 0; i < host->nEntries; i ++) {
         RCRE_model3D_entry *deviceEntry;
         cudaMalloc((void**)&deviceEntry, sizeof(RCRE_model3D_entry));

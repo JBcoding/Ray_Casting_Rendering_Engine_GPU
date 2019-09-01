@@ -33,7 +33,7 @@ void RCRE_engine_getImage(RCRE_point3D *cameraPosition, RCRE_point3D *cameraDire
 
     RCRE_model3D **modelsCUDA;
     cudaMalloc((void**)&modelsCUDA, sizeof(RCRE_model3D *) * nModels);
-    RCRE_model3D **tempModelList = malloc(sizeof(RCRE_model3D *) * nModels);
+    RCRE_model3D **tempModelList = (RCRE_model3D **)malloc(sizeof(RCRE_model3D *) * nModels);
     for (int i = 0; i < nModels; i ++) {
         tempModelList[i] = RCRE_model3D_toCUDA(models[i]);
     }

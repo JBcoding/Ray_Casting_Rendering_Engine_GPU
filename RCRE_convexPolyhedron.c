@@ -14,7 +14,7 @@ PRE_DEVICE RCRE_convexPolyhedron *RCRE_convexPolyhedron_getConvexPolyhedronFromP
     int nFaces = 0;
     int nFaceSpace = 16;
 
-    RCRE_triangle3D **faces = malloc(sizeof(RCRE_triangle3D*) * nFaceSpace);
+    RCRE_triangle3D **faces = (RCRE_triangle3D **)malloc(sizeof(RCRE_triangle3D*) * nFaceSpace);
 
     int offset = 0;
 
@@ -52,7 +52,7 @@ PRE_DEVICE RCRE_convexPolyhedron *RCRE_convexPolyhedron_getConvexPolyhedronFromP
             if (RCRE_triangle3D_isPointOnPositiveSide(faces[j], point) < 0) {
                 if (nFaces + 3 >= nFaceSpace) {
                     nFaceSpace *= 2;
-                    RCRE_triangle3D **newFaces = malloc(sizeof(RCRE_triangle3D*) * nFaceSpace);
+                    RCRE_triangle3D **newFaces = (RCRE_triangle3D **)malloc(sizeof(RCRE_triangle3D*) * nFaceSpace);
                     for (int k = 0; k < nFaces; k ++) {
                         newFaces[k] = faces[k];
                     }
@@ -106,9 +106,9 @@ PRE_DEVICE RCRE_convexPolyhedron *RCRE_convexPolyhedron_getConvexPolyhedronFromP
 
     }
 
-    RCRE_convexPolyhedron *convexPolyhedron = malloc(sizeof(RCRE_convexPolyhedron));
+    RCRE_convexPolyhedron *convexPolyhedron = (RCRE_convexPolyhedron *)malloc(sizeof(RCRE_convexPolyhedron));
     convexPolyhedron->nTriangles = nFaces;
-    convexPolyhedron->triangles = malloc(sizeof(RCRE_triangle3D*) * nFaces);
+    convexPolyhedron->triangles = (RCRE_triangle3D **)malloc(sizeof(RCRE_triangle3D *) * nFaces);
     for (int i = 0; i < nFaces; i ++) {
         convexPolyhedron->triangles[i] = faces[i];
     }

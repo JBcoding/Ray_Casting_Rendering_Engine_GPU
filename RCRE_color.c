@@ -6,7 +6,7 @@
 #include "RCRE_constants.h"
 
 PRE_DEVICE RCRE_color *RCRE_color_getColorFromValues(double r, double g, double b) {
-    RCRE_color *color = malloc(sizeof(RCRE_color));
+    RCRE_color *color = (RCRE_color *)malloc(sizeof(RCRE_color));
     color->r = r;
     color->g = g;
     color->b = b;

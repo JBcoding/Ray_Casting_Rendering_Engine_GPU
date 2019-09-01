@@ -6,7 +6,7 @@
 #include "RCRE_constants.h"
 
 PRE_DEVICE RCRE_sphere *RCRE_sphere_getSphereFromPointAndRadius(RCRE_point3D *center, double radius) {
-    RCRE_sphere *sphere = malloc(sizeof(RCRE_sphere));
+    RCRE_sphere *sphere = (RCRE_sphere *)malloc(sizeof(RCRE_sphere));
     sphere->center = center;
     sphere->radius = radius;
     return sphere;

@@ -8,7 +8,7 @@
 PRE_DEVICE RCRE_transformationMatrix *RCRE_transformationMatrix_getTransformationMatrixFromValues(double a, double b, double c,
                                                                                        double d, double e, double f,
                                                                                        double g, double h, double i) {
-    RCRE_transformationMatrix *transformationMatrix = malloc(sizeof(RCRE_transformationMatrix));
+    RCRE_transformationMatrix *transformationMatrix = (RCRE_transformationMatrix *)malloc(sizeof(RCRE_transformationMatrix));
 
     transformationMatrix->a = a;
     transformationMatrix->b = b;

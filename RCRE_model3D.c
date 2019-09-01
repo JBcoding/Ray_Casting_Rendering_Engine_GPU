@@ -8,10 +8,10 @@
 #include "RCRE_sphere.h"
 
 PRE_DEVICE RCRE_model3D *RCRE_model3D_getModel(RCRE_transformationMatrix *tm, RCRE_color *color, double reflectivity, double transparency, double refractiveIndex) {
-    RCRE_model3D *model3D = malloc(sizeof(RCRE_model3D));
+    RCRE_model3D *model3D = (RCRE_model3D *)malloc(sizeof(RCRE_model3D));
     model3D->nEntries = 0;
     model3D->nEntriesSpace = 16;
-    model3D->entries = malloc(sizeof(RCRE_model3D_entry*) * model3D->nEntriesSpace);
+    model3D->entries = (RCRE_model3D_entry **)malloc(sizeof(RCRE_model3D_entry *) * model3D->nEntriesSpace);
     model3D->transformationMatrix = tm;
     RCRE_transformationMatrix *inverseMatrix = RCRE_transformationMatrix_getIdentityMatrix();
     RCRE_transformationMatrix_inverse(tm, inverseMatrix);
@@ -31,7 +31,7 @@ PRE_DEVICE RCRE_model3D *RCRE_model3D_getModel(RCRE_transformationMatrix *tm, RC
 PRE_DEVICE void RCRE_model3D_insertEntry(RCRE_model3D *model, void *data, int datatype, bool negative, RCRE_transformationMatrix *tm) {
     if (model->nEntries + 1 >= model->nEntriesSpace) {
         model->nEntriesSpace *= 2;
-        RCRE_model3D_entry **newEntries = malloc(sizeof(RCRE_model3D_entry*) * model->nEntriesSpace);
+        RCRE_model3D_entry **newEntries = (RCRE_model3D_entry **)malloc(sizeof(RCRE_model3D_entry*) * model->nEntriesSpace);
         for (int i = 0; i < model->nEntries; i ++) {
             newEntries[i] = model->entries[i];
         }
@@ -39,7 +39,7 @@ PRE_DEVICE void RCRE_model3D_insertEntry(RCRE_model3D *model, void *data, int da
         model->entries = newEntries;
     }
 
-    RCRE_model3D_entry *entry = malloc(sizeof(RCRE_model3D_entry));
+    RCRE_model3D_entry *entry = (RCRE_model3D_entry *)malloc(sizeof(RCRE_model3D_entry));
     entry->data = data;
     entry->datatype = datatype;
     entry->negative = negative;
@@ -172,7 +172,8 @@ PRE_DEVICE bool RCRE_model3D_getIntersectionPoint(RCRE_model3D *m, bool rayOrigi
                         RCRE_point3D_crossProduct(&reflectiveDirection, rayDirection, &axisToTurnAbout);
                         double angleToTurn = angleToNormal - newAngleToNormal;
 
-                        RCRE_point3D_rotatePointAroundAxis(rayDirection, &axisToTurnAbout, &RCRE_point3D_ORIGIN,
+                        RCRE_point3D origin = {0, 0, 0};
+                        RCRE_point3D_rotatePointAroundAxis(rayDirection, &axisToTurnAbout, &origin,
                                                            angleToTurn, &insideRayDirection);
                     } else {
                         RCRE_point3D_copyInto(rayDirection, &insideRayDirection);
