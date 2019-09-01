@@ -121,14 +121,14 @@ int main() {
 
     FILE *videoWriter = RCRE_ffmpeg_getVideoWriter(width, height, 24, "output");
     FILE *imgWriter = RCRE_ffmpeg_getImageWriter(width, height, "output");
-    for (int i = 220/*220*/; i < 330; i += 1) {
+    for (int i = 280/*220*/; i < 281/*330*/; i += 1) {
         free(cameraPosition);
         cameraPosition = RCRE_point3D_getPointFromValues(sin(i / 180.0 * M_PI) * 2 + 1.5, 0.5, cos(i / 180.0 * M_PI) * 2 + 0.5);
         RCRE_point3D_subtract(centerPoint, cameraPosition, cameraDirection);
 
         RCRE_engine_getImage(cameraPosition, cameraDirection, cameraUpDirection, nModels, models, width, height, angleOfView, imageBuffer);
-        RCRE_ffmpeg_writeToFile(videoWriter, imageBuffer, width, height);
-        //RCRE_ffmpeg_writeToFile(imgWriter, imageBuffer, width, height);
+        //RCRE_ffmpeg_writeToFile(videoWriter, imageBuffer, width, height);
+        RCRE_ffmpeg_writeToFile(imgWriter, imageBuffer, width, height);
     }
     RCRE_ffmpeg_closeFile(videoWriter);
     RCRE_ffmpeg_closeFile(imgWriter);

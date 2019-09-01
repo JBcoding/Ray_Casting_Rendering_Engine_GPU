@@ -5,7 +5,7 @@
 #include "RCRE_point3D.h"
 #include "RCRE_constants.h"
 
-RCRE_point3D *RCRE_point3D_getPointFromValues(double x, double y, double z) {
+PRE_DEVICE RCRE_point3D *RCRE_point3D_getPointFromValues(double x, double y, double z) {
     RCRE_point3D *point3D = malloc(sizeof(RCRE_point3D));
     point3D->x = x;
     point3D->y = y;
@@ -13,48 +13,48 @@ RCRE_point3D *RCRE_point3D_getPointFromValues(double x, double y, double z) {
     return point3D;
 }
 
-RCRE_point3D *RCRE_point3D_copy(RCRE_point3D *p) {
+PRE_DEVICE RCRE_point3D *RCRE_point3D_copy(RCRE_point3D *p) {
     return RCRE_point3D_getPointFromValues(p->x, p->y, p->z);
 }
 
-void RCRE_point3D_copyInto(RCRE_point3D *p, RCRE_point3D *out) {
+PRE_DEVICE void RCRE_point3D_copyInto(RCRE_point3D *p, RCRE_point3D *out) {
     out->x = p->x;
     out->y = p->y;
     out->z = p->z;
 }
 
 
-bool RCRE_point3D_equal(RCRE_point3D *a, RCRE_point3D *b) {
+PRE_DEVICE bool RCRE_point3D_equal(RCRE_point3D *a, RCRE_point3D *b) {
     return a->x == b->x && a->y == b->y && a->z == b->z;
 }
 
-void RCRE_point3D_add(RCRE_point3D *a, RCRE_point3D *b, RCRE_point3D *out) {
+PRE_DEVICE void RCRE_point3D_add(RCRE_point3D *a, RCRE_point3D *b, RCRE_point3D *out) {
     out->x = a->x + b->x;
     out->y = a->y + b->y;
     out->z = a->z + b->z;
 }
 
-void RCRE_point3D_subtract(RCRE_point3D *a, RCRE_point3D *b, RCRE_point3D *out) {
+PRE_DEVICE void RCRE_point3D_subtract(RCRE_point3D *a, RCRE_point3D *b, RCRE_point3D *out) {
     out->x = a->x - b->x;
     out->y = a->y - b->y;
     out->z = a->z - b->z;
 }
 
-void RCRE_point3D_scale(RCRE_point3D *p, double scale, RCRE_point3D *out) {
+PRE_DEVICE void RCRE_point3D_scale(RCRE_point3D *p, double scale, RCRE_point3D *out) {
     out->x = p->x * scale;
     out->y = p->y * scale;
     out->z = p->z * scale;
 }
 
-double RCRE_point3D_distance(RCRE_point3D *a, RCRE_point3D *b) {
+PRE_DEVICE double RCRE_point3D_distance(RCRE_point3D *a, RCRE_point3D *b) {
     return sqrt(square(a->x - b->x) + square(a->y - b->y) + square(a->z - b->z));
 }
 
-double RCRE_point3D_distanceToOrigin(RCRE_point3D *a) {
+PRE_DEVICE double RCRE_point3D_distanceToOrigin(RCRE_point3D *a) {
     return sqrt(square(a->x) + square(a->y) + square(a->z));
 }
 
-void RCRE_point3D_crossProduct(RCRE_point3D *a, RCRE_point3D *b, RCRE_point3D *out) {
+PRE_DEVICE void RCRE_point3D_crossProduct(RCRE_point3D *a, RCRE_point3D *b, RCRE_point3D *out) {
     double x = a->y * b->z - a->z * b->y;
     double y = a->z * b->x - a->x * b->z;
     double z = a->x * b->y - a->y * b->x;
@@ -63,11 +63,11 @@ void RCRE_point3D_crossProduct(RCRE_point3D *a, RCRE_point3D *b, RCRE_point3D *o
     out->z = z;
 }
 
-double RCRE_point3D_dotProduct(RCRE_point3D *a, RCRE_point3D *b) {
+PRE_DEVICE double RCRE_point3D_dotProduct(RCRE_point3D *a, RCRE_point3D *b) {
     return a->x * b->x + a->y * b->y + a->z * b->z;
 }
 
-void RCRE_point3D_getUnit(RCRE_point3D *p, RCRE_point3D *out) {
+PRE_DEVICE void RCRE_point3D_getUnit(RCRE_point3D *p, RCRE_point3D *out) {
     double length = RCRE_point3D_distanceToOrigin(p);
     out->x = p->x / length;
     out->y = p->y / length;
@@ -75,7 +75,7 @@ void RCRE_point3D_getUnit(RCRE_point3D *p, RCRE_point3D *out) {
 }
 
 
-bool RCRE_point3D_arePointsOnTheSamePlane(RCRE_point3D *a, RCRE_point3D *b, RCRE_point3D *c, RCRE_point3D *d) {
+PRE_DEVICE bool RCRE_point3D_arePointsOnTheSamePlane(RCRE_point3D *a, RCRE_point3D *b, RCRE_point3D *c, RCRE_point3D *d) {
     if (RCRE_point3D_equal(a, b) || RCRE_point3D_equal(a, c) || RCRE_point3D_equal(a, d) ||
         RCRE_point3D_equal(b, c) || RCRE_point3D_equal(b, d) || RCRE_point3D_equal(c, d)) {
         return true;
@@ -101,13 +101,13 @@ bool RCRE_point3D_arePointsOnTheSamePlane(RCRE_point3D *a, RCRE_point3D *b, RCRE
     return diff < minimumSignificant;
 }
 
-bool RCRE_point3D_averagePointsWithWeight(RCRE_point3D *a, RCRE_point3D *b, double weight, RCRE_point3D *out) {
+PRE_DEVICE bool RCRE_point3D_averagePointsWithWeight(RCRE_point3D *a, RCRE_point3D *b, double weight, RCRE_point3D *out) {
     out->x = a->x * (1 - weight) + b->x * weight;
     out->y = a->y * (1 - weight) + b->y * weight;
     out->z = a->z * (1 - weight) + b->z * weight;
 }
 
-void RCRE_point3D_rotatePointAroundAxis(RCRE_point3D *p, RCRE_point3D *axisDirection, RCRE_point3D *axisPoint,
+PRE_DEVICE void RCRE_point3D_rotatePointAroundAxis(RCRE_point3D *p, RCRE_point3D *axisDirection, RCRE_point3D *axisPoint,
                                         double angle, RCRE_point3D *out) {
     // result of rotating the point (x,y,z) about the line through (a,b,c) with direction vector ⟨u,v,w⟩ (where u^2 + v^2 + w^2 = 1) by the angle θ
     // newX = (a(v^2 + w^2) - u(bv + cw - ux - vy - wz))(1 - cos θ) + x cos θ + (- cv + bw - wy + vz) sin θ
@@ -131,7 +131,7 @@ void RCRE_point3D_rotatePointAroundAxis(RCRE_point3D *p, RCRE_point3D *axisDirec
     out->z = newZ;
 }
 
-double RCRE_point3D_getAngleBetweenPoints(RCRE_point3D *p1, RCRE_point3D *p2) {
+PRE_DEVICE double RCRE_point3D_getAngleBetweenPoints(RCRE_point3D *p1, RCRE_point3D *p2) {
     double cosAngle = RCRE_point3D_dotProduct(p1, p2) / (RCRE_point3D_distanceToOrigin(p1) * RCRE_point3D_distanceToOrigin(p2));
     return acos(cosAngle);
 }

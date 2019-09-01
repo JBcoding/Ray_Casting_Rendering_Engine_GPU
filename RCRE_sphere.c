@@ -5,23 +5,23 @@
 #include "RCRE_sphere.h"
 #include "RCRE_constants.h"
 
-RCRE_sphere *RCRE_sphere_getSphereFromPointAndRadius(RCRE_point3D *center, double radius) {
+PRE_DEVICE RCRE_sphere *RCRE_sphere_getSphereFromPointAndRadius(RCRE_point3D *center, double radius) {
     RCRE_sphere *sphere = malloc(sizeof(RCRE_sphere));
     sphere->center = center;
     sphere->radius = radius;
     return sphere;
 }
 
-RCRE_sphere *RCRE_sphere_getSphereFromPointValueAndRadius(RCRE_point3D *center, double radius) {
+PRE_DEVICE RCRE_sphere *RCRE_sphere_getSphereFromPointValueAndRadius(RCRE_point3D *center, double radius) {
     return RCRE_sphere_getSphereFromPointAndRadius(RCRE_point3D_copy(center), radius);
 }
 
 
-bool RCRE_sphere_isPointContainedWithin(RCRE_sphere *s, RCRE_point3D *p) {
+PRE_DEVICE bool RCRE_sphere_isPointContainedWithin(RCRE_sphere *s, RCRE_point3D *p) {
     return RCRE_point3D_distance(s->center, p) < s->radius;
 }
 
-bool RCRE_sphere_getIntersectionPoint(RCRE_sphere *s, RCRE_point3D *rayOrigin, RCRE_point3D *rayDirection, int index,
+PRE_DEVICE bool RCRE_sphere_getIntersectionPoint(RCRE_sphere *s, RCRE_point3D *rayOrigin, RCRE_point3D *rayDirection, int index,
                                       RCRE_point3D *outIntersectionPoint, RCRE_point3D *outReflectiveDirection) {
     // ASSUMING rayDirection is a UNIT vector
 

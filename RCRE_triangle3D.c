@@ -5,7 +5,7 @@
 #include "RCRE_triangle3D.h"
 #include "RCRE_constants.h"
 
-RCRE_triangle3D *RCRE_triangle3D_getTriangleFromPoints(RCRE_point3D *p1, RCRE_point3D *p2, RCRE_point3D *p3) {
+PRE_DEVICE RCRE_triangle3D *RCRE_triangle3D_getTriangleFromPoints(RCRE_point3D *p1, RCRE_point3D *p2, RCRE_point3D *p3) {
     struct RCRE_triangle3D *triangle3D = malloc(sizeof(RCRE_triangle3D));
     triangle3D->p1 = p1;
     triangle3D->p2 = p2;
@@ -13,16 +13,16 @@ RCRE_triangle3D *RCRE_triangle3D_getTriangleFromPoints(RCRE_point3D *p1, RCRE_po
     return triangle3D;
 }
 
-RCRE_triangle3D *RCRE_triangle3D_getTriangleFromPointValues(RCRE_point3D *p1, RCRE_point3D *p2, RCRE_point3D *p3) {
+PRE_DEVICE RCRE_triangle3D *RCRE_triangle3D_getTriangleFromPointValues(RCRE_point3D *p1, RCRE_point3D *p2, RCRE_point3D *p3) {
     return RCRE_triangle3D_getTriangleFromPoints(RCRE_point3D_copy(p1), RCRE_point3D_copy(p2), RCRE_point3D_copy(p3));
 }
 
 
-bool RCRE_triangle3D_equals(RCRE_triangle3D *t1, RCRE_triangle3D *t2) {
+PRE_DEVICE bool RCRE_triangle3D_equals(RCRE_triangle3D *t1, RCRE_triangle3D *t2) {
     return RCRE_point3D_equal(t1->p1, t2->p1) && RCRE_point3D_equal(t1->p2, t2->p2) && RCRE_point3D_equal(t1->p3, t2->p3);
 }
 
-bool RCRE_triangle3D_equalsWeak(RCRE_triangle3D *t1, RCRE_triangle3D *t2) {
+PRE_DEVICE bool RCRE_triangle3D_equalsWeak(RCRE_triangle3D *t1, RCRE_triangle3D *t2) {
     return
             (RCRE_point3D_equal(t1->p1, t2->p1) && RCRE_point3D_equal(t1->p2, t2->p2) && RCRE_point3D_equal(t1->p3, t2->p3))
             ||
@@ -37,11 +37,11 @@ bool RCRE_triangle3D_equalsWeak(RCRE_triangle3D *t1, RCRE_triangle3D *t2) {
             (RCRE_point3D_equal(t1->p1, t2->p3) && RCRE_point3D_equal(t1->p2, t2->p2) && RCRE_point3D_equal(t1->p3, t2->p1));
 }
 
-double RCRE_triangle3D_getArea(RCRE_triangle3D *t) {
+PRE_DEVICE double RCRE_triangle3D_getArea(RCRE_triangle3D *t) {
     return RCRE_triangle3D_getAreaTimes2(t) / 2.0;
 }
 
-double RCRE_triangle3D_getAreaTimes2(RCRE_triangle3D *t) {
+PRE_DEVICE double RCRE_triangle3D_getAreaTimes2(RCRE_triangle3D *t) {
     RCRE_point3D ab = {0};
     RCRE_point3D ac = {0};
     RCRE_point3D normal = {0};
@@ -56,7 +56,7 @@ double RCRE_triangle3D_getAreaTimes2(RCRE_triangle3D *t) {
 }
 
 
-void RCRE_triangle3D_rotateTriangleAfterPoint(RCRE_triangle3D *t, RCRE_point3D *p) {
+PRE_DEVICE void RCRE_triangle3D_rotateTriangleAfterPoint(RCRE_triangle3D *t, RCRE_point3D *p) {
     RCRE_point3D ab = {0};
     RCRE_point3D ac = {0};
 
@@ -79,7 +79,7 @@ void RCRE_triangle3D_rotateTriangleAfterPoint(RCRE_triangle3D *t, RCRE_point3D *
     }
 }
 
-int RCRE_triangle3D_isPointOnPositiveSide(RCRE_triangle3D *t, RCRE_point3D *p) {
+PRE_DEVICE int RCRE_triangle3D_isPointOnPositiveSide(RCRE_triangle3D *t, RCRE_point3D *p) {
     if (RCRE_point3D_arePointsOnTheSamePlane(t->p1, t->p2, t->p3, p)) {
         return 0;
     }
@@ -107,7 +107,7 @@ int RCRE_triangle3D_isPointOnPositiveSide(RCRE_triangle3D *t, RCRE_point3D *p) {
 
 }
 
-bool RCRE_triangle3D_getIntersectionPoint(RCRE_triangle3D *t, RCRE_point3D *rayOrigin, RCRE_point3D *rayDirection,
+PRE_DEVICE bool RCRE_triangle3D_getIntersectionPoint(RCRE_triangle3D *t, RCRE_point3D *rayOrigin, RCRE_point3D *rayDirection,
                                           RCRE_point3D *outIntersectionPoint, RCRE_point3D *outReflectiveDirection) {
 
     RCRE_point3D planeNormal = {0};

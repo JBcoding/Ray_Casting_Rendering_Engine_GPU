@@ -5,7 +5,7 @@
 #include "RCRE_convexPolyhedron.h"
 #include "RCRE_constants.h"
 
-RCRE_convexPolyhedron *RCRE_convexPolyhedron_getConvexPolyhedronFromPoints(int nPoints, RCRE_point3D **points) {
+PRE_DEVICE RCRE_convexPolyhedron *RCRE_convexPolyhedron_getConvexPolyhedronFromPoints(int nPoints, RCRE_point3D **points) {
 
     if (nPoints < 4) {
         return NULL;
@@ -130,7 +130,7 @@ RCRE_convexPolyhedron *RCRE_convexPolyhedron_getConvexPolyhedronFromPoints(int n
 }
 
 
-bool RCRE_convexPolyhedron_isPointContainedWithin(RCRE_convexPolyhedron *cp, RCRE_point3D *p) {
+PRE_DEVICE bool RCRE_convexPolyhedron_isPointContainedWithin(RCRE_convexPolyhedron *cp, RCRE_point3D *p) {
     for (int i = 0; i < cp->nTriangles; i ++) {
         if (RCRE_triangle3D_isPointOnPositiveSide(cp->triangles[i], p) <= 0) {
             return false;
@@ -139,7 +139,7 @@ bool RCRE_convexPolyhedron_isPointContainedWithin(RCRE_convexPolyhedron *cp, RCR
     return true;
 }
 
-bool RCRE_convexPolyhedron_getIntersectionPoint(RCRE_convexPolyhedron *cp, RCRE_point3D *rayOrigin,
+PRE_DEVICE bool RCRE_convexPolyhedron_getIntersectionPoint(RCRE_convexPolyhedron *cp, RCRE_point3D *rayOrigin,
                                                 RCRE_point3D *rayDirection, int index,
                                                 RCRE_point3D *outIntersectionPoint,
                                                 RCRE_point3D *outReflectiveDirection) {

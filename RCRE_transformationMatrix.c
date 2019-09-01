@@ -5,7 +5,7 @@
 #include "RCRE_transformationMatrix.h"
 #include "RCRE_constants.h"
 
-RCRE_transformationMatrix *RCRE_transformationMatrix_getTransformationMatrixFromValues(double a, double b, double c,
+PRE_DEVICE RCRE_transformationMatrix *RCRE_transformationMatrix_getTransformationMatrixFromValues(double a, double b, double c,
                                                                                        double d, double e, double f,
                                                                                        double g, double h, double i) {
     RCRE_transformationMatrix *transformationMatrix = malloc(sizeof(RCRE_transformationMatrix));
@@ -25,19 +25,19 @@ RCRE_transformationMatrix *RCRE_transformationMatrix_getTransformationMatrixFrom
     return transformationMatrix;
 }
 
-RCRE_transformationMatrix *RCRE_transformationMatrix_getIdentityMatrix() {
+PRE_DEVICE RCRE_transformationMatrix *RCRE_transformationMatrix_getIdentityMatrix() {
     return RCRE_transformationMatrix_getTransformationMatrixFromValues( 1, 0, 0,
                                                                         0, 1, 0,
                                                                         0, 0, 1);
 }
 
-RCRE_transformationMatrix *RCRE_transformationMatrix_getScalingMatrix(double x, double y, double z) {
+PRE_DEVICE RCRE_transformationMatrix *RCRE_transformationMatrix_getScalingMatrix(double x, double y, double z) {
     return RCRE_transformationMatrix_getTransformationMatrixFromValues( x, 0, 0,
                                                                         0, y, 0,
                                                                         0, 0, z);
 }
 
-RCRE_transformationMatrix *RCRE_transformationMatrix_getShearingMatrix(double xy, double xz,
+PRE_DEVICE RCRE_transformationMatrix *RCRE_transformationMatrix_getShearingMatrix(double xy, double xz,
                                                                        double yx, double yz,
                                                                        double zx, double zy) {
     return RCRE_transformationMatrix_getTransformationMatrixFromValues(  1, xy, xz,
@@ -45,26 +45,26 @@ RCRE_transformationMatrix *RCRE_transformationMatrix_getShearingMatrix(double xy
                                                                         zx, zy,  1);
 }
 
-RCRE_transformationMatrix *RCRE_transformationMatrix_getRotationMatrixXAxis(double theta) {
+PRE_DEVICE RCRE_transformationMatrix *RCRE_transformationMatrix_getRotationMatrixXAxis(double theta) {
     return RCRE_transformationMatrix_getTransformationMatrixFromValues( 1,          0,           0,
                                                                         0, cos(theta), -sin(theta),
                                                                         0, sin(theta),  cos(theta));
 }
 
-RCRE_transformationMatrix *RCRE_transformationMatrix_getRotationMatrixYAxis(double theta) {
+PRE_DEVICE RCRE_transformationMatrix *RCRE_transformationMatrix_getRotationMatrixYAxis(double theta) {
     return RCRE_transformationMatrix_getTransformationMatrixFromValues(  cos(theta), 0, sin(theta),
                                                                                   0, 1,          0,
                                                                         -sin(theta), 0, cos(theta));
 }
 
-RCRE_transformationMatrix *RCRE_transformationMatrix_getRotationMatrixZAxis(double theta) {
+PRE_DEVICE RCRE_transformationMatrix *RCRE_transformationMatrix_getRotationMatrixZAxis(double theta) {
     return RCRE_transformationMatrix_getTransformationMatrixFromValues( cos(theta), -sin(theta), 0,
                                                                         sin(theta),  cos(theta), 0,
                                                                                  0,           0, 1);
 }
 
 
-void RCRE_transformationMatrix_multiplication(RCRE_transformationMatrix *m1, RCRE_transformationMatrix *m2, RCRE_transformationMatrix *out) {
+PRE_DEVICE void RCRE_transformationMatrix_multiplication(RCRE_transformationMatrix *m1, RCRE_transformationMatrix *m2, RCRE_transformationMatrix *out) {
     double newA = m1->a * m2->a + m1->b * m2->d + m1->c * m2->g;
     double newB = m1->a * m2->b + m1->b * m2->e + m1->c * m2->h;
     double newC = m1->a * m2->c + m1->b * m2->f + m1->c * m2->i;
@@ -90,13 +90,13 @@ void RCRE_transformationMatrix_multiplication(RCRE_transformationMatrix *m1, RCR
     out->i = newI;
 }
 
-double RCRE_transformationMatrix_determinant(RCRE_transformationMatrix *m) {
+PRE_DEVICE double RCRE_transformationMatrix_determinant(RCRE_transformationMatrix *m) {
     return  m->a * (m->e * m->i - m->f * m->h) -
             m->b * (m->d * m->i - m->g * m->f) +
             m->c * (m->d * m->h - m->e * m->g);
 }
 
-void RCRE_transformationMatrix_inverse(RCRE_transformationMatrix *m, RCRE_transformationMatrix *out) {
+PRE_DEVICE void RCRE_transformationMatrix_inverse(RCRE_transformationMatrix *m, RCRE_transformationMatrix *out) {
     double A =  (m->e * m->i - m->f * m->h), B = -(m->b * m->i - m->c * m->h), C =  (m->b * m->f - m->c * m->e);
     double D = -(m->d * m->i - m->f * m->g), E =  (m->a * m->i - m->c * m->g), F = -(m->a * m->f - m->c * m->d);
     double G =  (m->d * m->h - m->e * m->g), H = -(m->a * m->h - m->b * m->g), I =  (m->a * m->e - m->b * m->d);
@@ -116,7 +116,7 @@ void RCRE_transformationMatrix_inverse(RCRE_transformationMatrix *m, RCRE_transf
     out->i = I * factor;
 }
 
-void RCRE_transformationMatrix_applyToPoint(RCRE_transformationMatrix *m, RCRE_point3D *p, RCRE_point3D *out) {
+PRE_DEVICE void RCRE_transformationMatrix_applyToPoint(RCRE_transformationMatrix *m, RCRE_point3D *p, RCRE_point3D *out) {
     double newX = m->a * p->x + m->b * p->y + m->c * p->z;
     double newY = m->d * p->x + m->e * p->y + m->f * p->z;
     double newZ = m->g * p->x + m->h * p->y + m->i * p->z;
@@ -126,7 +126,7 @@ void RCRE_transformationMatrix_applyToPoint(RCRE_transformationMatrix *m, RCRE_p
     out->z = newZ;
 }
 
-void RCRE_transformationMatrix_applyToPointWithRegardsToPoint(RCRE_transformationMatrix *m, RCRE_point3D *p,
+PRE_DEVICE void RCRE_transformationMatrix_applyToPointWithRegardsToPoint(RCRE_transformationMatrix *m, RCRE_point3D *p,
                                                               RCRE_point3D *o, RCRE_point3D *out) {
     RCRE_point3D po = {0};
     RCRE_point3D_subtract(p, o, &po);
